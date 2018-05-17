@@ -6,8 +6,7 @@ import java.util.Arrays;
  * Phone number validation, and formatter.
  * this class is immutable.
  **/
-public class PhoneNumber
-{
+public class PhoneNumber {
     public static final int USA = 0;
     public static final String[] COUNTRY_CODES = {
             "1", "20", "212", "213", "216", "218", "220", "221", "222", "223",
@@ -46,8 +45,7 @@ public class PhoneNumber
     private String invalidReason = null;
 
 
-    public PhoneNumber(String countryCode, String areaCode, String prefix, String suffix, String extension)
-    {
+    public PhoneNumber(String countryCode, String areaCode, String prefix, String suffix, String extension) {
         this.countryCode = countryCode;
         this.areaCode = areaCode;
         this.prefix = prefix;
@@ -55,29 +53,28 @@ public class PhoneNumber
         this.extension = extension;
         this.countryCodeIndex = Arrays.binarySearch(COUNTRY_CODES, countryCode);
     }
+
     public String getStrippedValue() {
         StringBuilder result = new StringBuilder("+");
-        if(countryCode != null)
+        if (countryCode != null)
             result.append(countryCode);
-        if(areaCode != null)
+        if (areaCode != null)
             result.append(areaCode);
-        if(prefix != null)
+        if (prefix != null)
             result.append(prefix);
-        if(suffix != null)
+        if (suffix != null)
             result.append(suffix);
-        if(extension != null)
-            result.append("x"+extension);
+        if (extension != null)
+            result.append("x" + extension);
         return result.toString();
     }
 
 
-    public String getValueAsNorthAmerican()
-    {
-        String result = "("+this.areaCode+")"+this.prefix+"-"+this.suffix;
-            if(this.extension != null)
-                result+="x"+this.extension;
+    public String getValueAsNorthAmerican() {
+        String result = "(" + this.areaCode + ")" + this.prefix + "-" + this.suffix;
+        if (this.extension != null)
+            result += "x" + this.extension;
         return result;
-
 
 
     }
@@ -91,7 +88,7 @@ public class PhoneNumber
         if (prefix != null)
             result.append(prefix + ".");
         if (suffix != null) {
-            if(areaCode == null)
+            if (areaCode == null)
                 result.append(suffix.substring(0, 3) + "." + suffix.substring(3));
             else
                 result.append(suffix);
@@ -101,12 +98,11 @@ public class PhoneNumber
         return result.toString();
     }
 
-    public boolean isValid()
-    {
+    public boolean isValid() {
         return (this.invalidReason == null);
     }
-    public boolean isNorthAmericanNumber()
-    {
+
+    public boolean isNorthAmericanNumber() {
         return this.countryCodeIndex == USA;
     }
 }
