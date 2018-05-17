@@ -51,13 +51,20 @@ public class PhoneNumber {
         this.prefix = prefix;
         this.suffix = suffix;
         this.extension = extension;
-        this.countryCodeIndex = Arrays.binarySearch(COUNTRY_CODES, countryCode);
+        if(countryCode != null)
+            this.countryCodeIndex = Arrays.binarySearch(COUNTRY_CODES, countryCode);
+        if(countryCodeIndex < 0) {
+            this.areaCode = countryCode;
+            this.countryCode = null;
+        }
     }
 
     public String getStrippedValue() {
         StringBuilder result = new StringBuilder("+");
         if (countryCode != null)
             result.append(countryCode);
+        else
+            result.append("1");
         if (areaCode != null)
             result.append(areaCode);
         if (prefix != null)
@@ -75,24 +82,22 @@ public class PhoneNumber {
         if (this.extension != null)
             result += "x" + this.extension;
         return result;
-
-
     }
 
     public String getValueAsInternational() {
         StringBuilder result = new StringBuilder("+");
         if (countryCode != null)
             result.append(countryCode + ".");
-        if (areaCode != null)
+        else
+            result.append("1.");
+        if (areaCode != null) {
             result.append(areaCode + ".");
-        if (prefix != null)
-            result.append(prefix + ".");
-        if (suffix != null) {
-            if (areaCode == null)
-                result.append(suffix.substring(0, 3) + "." + suffix.substring(3));
-            else
-                result.append(suffix);
+            result.append(prefix+"."+suffix);
+        } else {
+            String[] number = (prefix+suffix).split("(?<=\\G...)");
+            result.append(String.join(".", number));
         }
+
         if (extension != null)
             result.append("x" + extension);
         return result.toString();

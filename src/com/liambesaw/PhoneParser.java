@@ -8,8 +8,13 @@ public class PhoneParser {
     public static PhoneNumber getPhoneNumber(String number) {
         Pattern p = Pattern.compile("^(?:(?:\\+?(?<countrycode>\\d+)\\s*(?:[.-]\\s*)?)?(?:\\(\\s*(?<areacode>\\d+)\\s*\\)|(?<areacodealt>[2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])?)\\s*(?:[.-]\\s*)?)?(?<prefix>\\d+)\\s*(?:[.-]\\s*)?(?<suffix>[0-9]{4})(?:\\s*(?:#|x\\.?|ext\\.?|extension)\\s*(?<extension>\\d+))?$");
         Matcher matcher = p.matcher(number);
-        matcher.matches();
-
-        return new PhoneNumber(matcher.group("countrycode"), matcher.group("areacode"), matcher.group("prefix"), matcher.group("suffix"), matcher.group("extension"));
+        if(matcher.matches())
+            return new PhoneNumber(matcher.group("countrycode"), matcher.group("areacode"), matcher.group("prefix"), matcher.group("suffix"), matcher.group("extension"));
+        else {
+            p = Pattern.compile("^(?<prefix>\\d+)[.-](?<suffix>\\d+)$");
+            matcher = p.matcher(number);
+            matcher.matches();
+            return new PhoneNumber(null, null, matcher.group("prefix"), matcher.group("suffix"), null);
+        }
     }
 }
